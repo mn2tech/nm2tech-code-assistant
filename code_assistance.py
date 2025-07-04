@@ -24,8 +24,8 @@ plan = st.radio("Select your access tier", ["Free", "Pro", "Admin"])
 
 # Pro banner
 st.markdown("""
-<div style="padding:10px; background-color:#fff3cd; border-radius:6px; border:1px solid #ffeeba;">
-  <strong>🚀 Pro features launching soon:</strong> Debug and Convert options will be fully unlocked for Pro users after launch.
+<div style="padding:10px; background-color:#d1ecf1; border-radius:6px; border:1px solid #bee5eb;">
+  <strong>🌟 All features now live:</strong> Enjoy full access to Explain, Debug, and Convert functions during our public launch. Pricing tier enforcement begins soon!
 </div>
 """, unsafe_allow_html=True)
 
