@@ -12,7 +12,7 @@ st.set_page_config(page_title="NM2TECH AI Code Assistant", page_icon="💻", lay
 logo = Image.open("nm2tech_logo.png")
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image(logo, use_column_width=False)
+    st.image(logo, use_container_width=False)
     st.markdown("""
         <h1 style='color:#003f63;'>💻 NM2TECH AI Code Assistant</h1>
         <h3 style='font-style:italic; color:#555;'>Technology simplified.</h3>
