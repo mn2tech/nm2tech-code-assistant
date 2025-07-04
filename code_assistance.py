@@ -15,12 +15,11 @@ with col2:
     st.image(logo, use_container_width=False)
     st.markdown("""
         <h1 style='color:#003f63;'>💻 NM2TECH AI Code Assistant</h1>
-        <h3 style='font-style:italic; color:#555;'>Technology simplified.</h3>
         <p style='font-size:18px;'>Welcome! Drop in any code snippet and let GPT-4 simplify it.</p>
     """, unsafe_allow_html=True)
 
 # Access tier selector (temporary public control)
-plan = st.radio("Select your access tier", ["Free", "Pro", "Admin"])
+plan = st.radio("Select your access tier", ["Free", "Pro"])
 
 # Pro banner
 st.markdown("""
