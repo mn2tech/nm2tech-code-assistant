@@ -66,14 +66,44 @@ st.markdown("""
 st.markdown("""
     <style>
     .stApp {
-        background-color: #f5f7fa;
+        background-color: #ffffff;
+        font-family: 'Segoe UI', sans-serif;
+        color: #1f1f1f;
+        padding: 0px;
+        margin: 0px;
     }
+
+    h1 {
+        color: #002b5b;
+        font-size: 28px;
+    }
+
+    p {
+        color: #444444;
+    }
+
     div.stButton > button {
-        background-color: #003f63;
-        color: white;
+        background-color: #0077cc;
+        color: #ffffff;
         font-size:16px;
-        border-radius:6px;
-        padding:10px 24px;
+        border-radius:8px;
+        padding:12px 28px;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    div.stButton > button:hover {
+        background-color: #005fa3;
+    }
+
+    .stRadio > div {
+        color: #002b5b;
+        font-weight: 500;
+    }
+
+    .stSelectbox, .stTextArea {
+        border-radius: 6px;
+        font-size: 15px;
     }
     </style>
 """, unsafe_allow_html=True)
