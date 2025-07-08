@@ -11,7 +11,7 @@ def log_to_airtable(user, prompt, response):
     table = Table(
         st.secrets["AIRTABLE_API_KEY"],
         st.secrets["AIRTABLE_BASE_ID"],
-        "NM2_Code_Assist"  # Your exact table name
+        "Logs"  # Your exact table name
     )
     table.create({
         "Timestamp": datetime.utcnow().isoformat(),
