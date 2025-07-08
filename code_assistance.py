@@ -79,7 +79,7 @@ elif st.button("Run Assistant"):
         log_to_airtable(
             user=st.session_state["session_id"],
             prompt=prompt,
-            response=output
+            response=output,
             feedback=feedback  # New argument!
         )
 
