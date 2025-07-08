@@ -27,12 +27,6 @@ def   log_to_airtable(
         "Response": response
     })
 
-    log_to_airtable(
-    user=st.session_state["session_id"],
-    prompt=prompt,
-    response=output
-)
-
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -79,6 +73,11 @@ elif st.button("Run Assistant"):
         st.markdown("### 💡 Result")
         st.code(output)
 
+        log_to_airtable(
+        user=st.session_state["session_id"],
+        prompt=prompt,
+        response=output
+        )
         # log_to_airtable(
         # user="michael",  # You can swap for session ID later
         # prompt=prompt,
