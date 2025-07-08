@@ -71,11 +71,16 @@ elif st.button("Run Assistant"):
         st.markdown("### 💡 Result")
         st.code(output)
 
+        # Add feedback option
+        feedback = st.radio("Was this result helpful?", ["👍 Yes", "👎 No"], horizontal=True)
+
+
         # ✅ Log this interaction
         log_to_airtable(
             user=st.session_state["session_id"],
             prompt=prompt,
             response=output
+            feedback=feedback  # New argument!
         )
 
         # Optional local logging
