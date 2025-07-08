@@ -11,7 +11,7 @@ if "session_id" not in st.session_state:
     st.session_state["session_id"] = str(datetime.utcnow().timestamp())
 
 # ✅ Airtable logging function
-def log_to_airtable(user, prompt, response):
+def log_to_airtable(user, prompt, response, feedback):
     table = Table(
         st.secrets["AIRTABLE_API_KEY"],
         st.secrets["AIRTABLE_BASE_ID"],
@@ -21,7 +21,9 @@ def log_to_airtable(user, prompt, response):
         "Timestamp": datetime.utcnow().isoformat(),
         "User": user,
         "Prompt": prompt,
-        "Response": response
+        "Response": response,
+        "Feedback": feedback  # ✅ Added field
+
     })
 
 # ✅ Load environment and API
