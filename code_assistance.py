@@ -3,6 +3,21 @@ import os, json
 from openai import OpenAI
 from dotenv import load_dotenv
 from PIL import Image
+from pyairtable import Table
+from datetime import datetime
+
+def log_to_airtable(user, prompt, response):
+    table = Table(
+        st.secrets["AIRTABLE_API_KEY"],
+        st.secrets["AIRTABLE_BASE_ID"],
+        "NM2_Code_Assist"  # Use your exact table name
+    )
+    table.create({
+        "Timestamp": datetime.utcnow().isoformat(),
+        "User": user,
+        "Prompt": prompt,
+        "Response": response
+    })
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
