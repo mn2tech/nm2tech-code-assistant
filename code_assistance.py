@@ -27,6 +27,12 @@ def   log_to_airtable(
         "Response": response
     })
 
+    log_to_airtable(
+    user=st.session_state["session_id"],
+    prompt=prompt,
+    response=output
+)
+
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
