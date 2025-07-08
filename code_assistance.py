@@ -73,11 +73,11 @@ elif st.button("Run Assistant"):
         st.markdown("### 💡 Result")
         st.code(output)
 
-        log_to_airtable(
-        user="michael",  # You can swap for session ID later
-        prompt=prompt,
-        response=output
-        )
+        # log_to_airtable(
+        # user="michael",  # You can swap for session ID later
+        # prompt=prompt,
+        # response=output
+        # )
 
         # Optional logging
         log = {"code": code_input, "action": action, "output": output}
