@@ -45,9 +45,6 @@ with col2:
 # ✅ Access tier logic
 plan = st.radio("Select your access tier", ["Free", "Pro"])
 
-# 🔘 Tier selector
-tier = st.radio("Select your access tier:", ["Free", "Pro"], horizontal=True)
-
 # 🔓 Show pricing + upgrade only if Pro is selected
 if tier == "Pro":
     st.markdown("""
