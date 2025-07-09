@@ -48,6 +48,16 @@ with col2:
 # 🔘 Tier selector
 tier = st.radio("Select your access tier:", ["Free", "Pro"], horizontal=True)
 
+query_params = st.experimental_get_query_params()
+if query_params.get("tier", ["free"])[0] == "pro" and st.session_state["pro_uses_left"] == 10:
+    st.markdown("""
+    <div style="margin-top:10px; padding:16px; background-color:#e6ffe6; border:1px solid #28a745; border-radius:8px;">
+      <h4 style='margin-bottom:10px;'>✅ Upgrade Confirmed</h4>
+      <p style='font-size:16px;'>Thanks for subscribing to <strong>NM2TECH Pro</strong>! You've unlocked unlimited access to Debug, Convert, and future premium features.</p>
+      <p style='font-size:16px;'>Let’s build something incredible together 💻✨</p>
+    </div>
+    """, unsafe_allow_html=True)
+
 # 💳 Conditional Pro banner
 if tier == "Pro":
     st.markdown("""
