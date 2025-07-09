@@ -61,8 +61,8 @@ if tier == "Pro":
 
 # 🌟 Announcement
 st.markdown("""
-<div style="padding:10px; background-color:#d1ecf1; border-radius:6px; border:1px solid #bee5eb;">
-  <strong>🌟 All features now live:</strong> Enjoy full access to Explain, Debug, and Convert during public launch. Pricing tier enforcement begins soon!
+<div style="padding:10px; background-color:#fff4e5; border-radius:6px; border:1px solid #ffeeba;">
+  <strong>🔐 Public preview complete:</strong> Debug and Convert features are now exclusive to Pro users. Select “Pro” to upgrade and unlock full access.
 </div>
 """, unsafe_allow_html=True)
 
