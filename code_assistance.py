@@ -48,8 +48,8 @@ with col2:
 # 🔘 Tier selector
 tier = st.radio("Select your access tier:", ["Free", "Pro"], horizontal=True)
 
-query_params = st.experimental_get_query_params()
-if query_params.get("tier", ["free"])[0] == "pro" and st.session_state["pro_uses_left"] == 10:
+query_params = st.query_params
+if query_params.get("tier", "free") == "pro" and st.session_state["pro_uses_left"] == 10:
     st.markdown("""
     <div style="margin-top:10px; padding:16px; background-color:#e6ffe6; border:1px solid #28a745; border-radius:8px;">
       <h4 style='margin-bottom:10px;'>✅ Upgrade Confirmed</h4>
