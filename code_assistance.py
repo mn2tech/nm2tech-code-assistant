@@ -6,9 +6,12 @@ from PIL import Image
 from pyairtable import Table
 from datetime import datetime
 
-# ✅ Session ID logic
+# ✅ Session setup
 if "session_id" not in st.session_state:
     st.session_state["session_id"] = str(datetime.utcnow().timestamp())
+
+if "pro_uses_left" not in st.session_state:
+    st.session_state["pro_uses_left"] = 10  # 🎟️ Free Pro trial tokens
 
 # ✅ Airtable logging
 def log_to_airtable(user, prompt, response, feedback):
@@ -29,10 +32,10 @@ def log_to_airtable(user, prompt, response, feedback):
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# ✅ Page config
+# ✅ App config
 st.set_page_config(page_title="NM2TECH AI Code Assistant", page_icon="💻", layout="centered")
 
-# ✅ Logo and welcome
+# ✅ Branding
 logo = Image.open("nm2tech_logo.png")
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
@@ -42,15 +45,15 @@ with col2:
         <p style='font-size:18px;'>Welcome! Drop in any code snippet and let GPT-4 simplify it.</p>
     """, unsafe_allow_html=True)
 
-# 🔘 Access tier selector
+# 🔘 Tier selector
 tier = st.radio("Select your access tier:", ["Free", "Pro"], horizontal=True)
 
-# 💳 Show pricing block conditionally
+# 💳 Conditional Pro banner
 if tier == "Pro":
     st.markdown("""
     <div style="margin-top:10px; padding:16px; background-color:#f8f9fa; border:1px solid #dee2e6; border-radius:8px;">
       <h4 style='margin-bottom:10px;'>💸 NM2TECH Pro Plan</h4>
-      <p style='font-size:16px;'>Enjoy unlimited runs, access to Debug & Convert features, and priority support.</p>
+      <p style='font-size:16px;'>Unlimited runs · Debug & Convert · Priority support</p>
       <p style='font-size:16px;'>Only <strong>$9.99/month</strong></p>
       <a href="https://buy.stripe.com/test_eVqcN4gWp07icGl2cbds400" target="_blank"
          style="color:white; background-color:#0077cc; padding:10px 20px; text-decoration:none; border-radius:6px; display:inline-block;">
@@ -59,10 +62,10 @@ if tier == "Pro":
     </div>
     """, unsafe_allow_html=True)
 
-# 🌟 Announcement
+# 📢 Announcement
 st.markdown("""
 <div style="padding:10px; background-color:#fff4e5; border-radius:6px; border:1px solid #ffeeba;">
-  <strong>🔐 Public preview complete:</strong> Debug and Convert features are now exclusive to Pro users. Select “Pro” to upgrade and unlock full access.
+  <strong>🔐 Public preview complete:</strong> Debug and Convert features are now exclusive to Pro users. Select “Pro” to access your free trial. Subscription required once trial ends.
 </div>
 """, unsafe_allow_html=True)
 
@@ -71,39 +74,49 @@ code_input = st.text_area("Paste your code", height=200)
 action = st.selectbox("Choose an action", ["Explain", "Debug", "Convert"])
 language = st.selectbox("Target Language (if converting)", ["Python", "JavaScript", "C++", "Go"])
 
-# 🔐 Feature gate
+# 🔐 Gating logic with trial tracking
 if tier == "Free" and action != "Explain":
     st.warning("Upgrade to Pro to access Debug and Convert features.")
-else:
-    if st.button("Run Assistant"):
-        with st.spinner("Analyzing with GPT-4..."):
-            prompt = f"You are a secure code assistant. {action} this code:\n{code_input}"
-            if action == "Convert":
-                prompt += f"\nConvert it into {language}."
+elif tier == "Pro" and action != "Explain":
+    if st.session_state["pro_uses_left"] > 0:
+        st.info(f"🎟️ {st.session_state['pro_uses_left']} free Pro runs left")
+    else:
+        st.error("🚫 Free Pro trial complete — please subscribe to continue.")
+        st.stop()
 
-            response = client.chat.completions.create(
-                model="gpt-4",
-                messages=[{"role": "user", "content": prompt}]
-            )
-            output = response.choices[0].message.content
-            st.markdown("### 💡 Result")
-            st.code(output)
+# ✅ Assistant logic
+if st.button("Run Assistant"):
+    with st.spinner("Analyzing with GPT-4..."):
+        prompt = f"You are a secure code assistant. {action} this code:\n{code_input}"
+        if action == "Convert":
+            prompt += f"\nConvert it into {language}."
 
-            # ✅ Feedback + Airtable logging
-            feedback = st.radio("Was this result helpful?", ["👍 Yes", "👎 No"], horizontal=True)
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}]
+        )
+        output = response.choices[0].message.content
+        st.markdown("### 💡 Result")
+        st.code(output)
 
-            log_to_airtable(
-                user=st.session_state["session_id"],
-                prompt=prompt,
-                response=output,
-                feedback=feedback
-            )
+        # ✅ Feedback + Airtable logging
+        feedback = st.radio("Was this result helpful?", ["👍 Yes", "👎 No"], horizontal=True)
 
-            # Optional local logging
-            log = {"code": code_input, "action": action, "output": output}
-            with open("session_logs.json", "a") as f:
-                json.dump(log, f)
-                f.write("\n")
+        log_to_airtable(
+            user=st.session_state["session_id"],
+            prompt=prompt,
+            response=output,
+            feedback=feedback
+        )
+
+        # ✅ Local JSON logging
+        with open("session_logs.json", "a") as f:
+            json.dump({"code": code_input, "action": action, "output": output}, f)
+            f.write("\n")
+
+        # 🎟️ Deduct Pro token if needed
+        if tier == "Pro" and action != "Explain":
+            st.session_state["pro_uses_left"] -= 1
 
 # ✅ Footer
 st.markdown("""
@@ -118,7 +131,6 @@ st.markdown("""
         background-color: #ffffff;
         font-family: 'Segoe UI', sans-serif;
         color: #1f1f1f;
-        padding: 0px; margin: 0px;
     }
     h1 { color: #002b5b; font-size: 28px; }
     p { color: #444444; }
