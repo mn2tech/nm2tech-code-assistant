@@ -42,8 +42,8 @@ with col2:
         <p style='font-size:18px;'>Welcome! Drop in any code snippet and let GPT-4 simplify it.</p>
     """, unsafe_allow_html=True)
 
-# ✅ Access tier logic
-plan = st.radio("Select your access tier", ["Free", "Pro"])
+# # ✅ Access tier logic
+# plan = st.radio("Select your access tier", ["Free", "Pro"])
 
 # 🔓 Show pricing + upgrade only if Pro is selected
 if tier == "Pro":
