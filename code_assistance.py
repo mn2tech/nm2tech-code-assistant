@@ -62,10 +62,12 @@ st.markdown("""
     </tr>
   </table>
   <br>
-  <a href="https://buy.stripe.com/test_eVqcN4gWp07icGl2cbds400" target="_blank" style="color:white; background-color:#0077cc; padding:10px 20px; text-decoration:none; border-radius:6px;">Upgrade to Pro 💳</a>
+  <a href="https://buy.stripe.com/test_eVqcN4gWp07icGl2cbds400" target="_blank"
+     style="color:white; background-color:#0077cc; padding:10px 20px; text-decoration:none; border-radius:6px;">
+     Upgrade to Pro 💳
+  </a>
 </div>
 """, unsafe_allow_html=True)
-
 # ✅ Access tier logic
 plan = st.radio("Select your access tier", ["Free", "Pro"])
 
