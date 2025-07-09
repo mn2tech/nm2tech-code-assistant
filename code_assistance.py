@@ -22,8 +22,7 @@ def log_to_airtable(user, prompt, response, feedback):
         "User": user,
         "Prompt": prompt,
         "Response": response,
-        "Feedback": feedback  # ✅ Added field
-
+        "Feedback": feedback
     })
 
 # ✅ Load environment and API
@@ -42,13 +41,10 @@ with col2:
         <p style='font-size:18px;'>Welcome! Drop in any code snippet and let GPT-4 simplify it.</p>
     """, unsafe_allow_html=True)
 
-# # ✅ Access tier logic
-# plan = st.radio("Select your access tier", ["Free", "Pro"])
-
 # 🔘 Tier selector
 tier = st.radio("Select your access tier:", ["Free", "Pro"], horizontal=True)
 
-# 🔓 Show pricing + upgrade only if Pro is selected
+# 🔓 Show pricing only if Pro is selected
 if tier == "Pro":
     st.markdown("""
     <div style="padding:16px; background-color:#f8f9fa; border:1px solid #dee2e6; border-radius:8px;">
@@ -73,40 +69,37 @@ code_input = st.text_area("Paste your code", height=200)
 action = st.selectbox("Choose an action", ["Explain", "Debug", "Convert"])
 language = st.selectbox("Target Language (if converting)", ["Python", "JavaScript", "C++", "Go"])
 
-# ✅ Assistant logic
-if plan == "Free" and action != "Explain":
+# ✅ Feature gating logic
+if tier == "Free" and action != "Explain":
     st.warning("Upgrade to Pro to access Debug and Convert features.")
-elif st.button("Run Assistant"):
-    with st.spinner("Analyzing with GPT-4..."):
-        prompt = f"You are a secure code assistant. {action} this code:\n{code_input}"
-        if action == "Convert":
-            prompt += f"\nConvert it into {language}."
+else:
+    if st.button("Run Assistant"):
+        with st.spinner("Analyzing with GPT-4..."):
+            prompt = f"You are a secure code assistant. {action} this code:\n{code_input}"
+            if action == "Convert":
+                prompt += f"\nConvert it into {language}."
 
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": prompt}]
-        )
-        output = response.choices[0].message.content
-        st.markdown("### 💡 Result")
-        st.code(output)
+            response = client.chat.completions.create(
+                model="gpt-4",
+                messages=[{"role": "user", "content": prompt}]
+            )
+            output = response.choices[0].message.content
+            st.markdown("### 💡 Result")
+            st.code(output)
 
-        # Add feedback option
-        feedback = st.radio("Was this result helpful?", ["👍 Yes", "👎 No"], horizontal=True)
+            feedback = st.radio("Was this result helpful?", ["👍 Yes", "👎 No"], horizontal=True)
 
+            log_to_airtable(
+                user=st.session_state["session_id"],
+                prompt=prompt,
+                response=output,
+                feedback=feedback
+            )
 
-        # ✅ Log this interaction
-        log_to_airtable(
-            user=st.session_state["session_id"],
-            prompt=prompt,
-            response=output,
-            feedback=feedback  # New argument!
-        )
-
-        # Optional local logging
-        log = {"code": code_input, "action": action, "output": output}
-        with open("session_logs.json", "a") as f:
-            json.dump(log, f)
-            f.write("\n")
+            log = {"code": code_input, "action": action, "output": output}
+            with open("session_logs.json", "a") as f:
+                json.dump(log, f)
+                f.write("\n")
 
 # ✅ Footer
 st.markdown("""
