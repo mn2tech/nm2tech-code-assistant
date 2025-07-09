@@ -41,6 +41,30 @@ with col2:
         <h1 style='color:#003f63;'>💻 NM2TECH AI Code Assistant</h1>
         <p style='font-size:18px;'>Welcome! Drop in any code snippet and let GPT-4 simplify it.</p>
     """, unsafe_allow_html=True)
+st.markdown("""
+<div style="padding:16px; background-color:#f8f9fa; border:1px solid #dee2e6; border-radius:8px;">
+  <h4 style='margin-bottom:10px;'>💸 NM2TECH Plans</h4>
+  <table style="width:100%; font-size:16px;">
+    <tr>
+      <th align="left">Plan</th>
+      <th align="left">Features</th>
+      <th align="left">Price</th>
+    </tr>
+    <tr>
+      <td><strong>Free</strong></td>
+      <td>Explain feature · 5 runs/day · Feedback tracking</td>
+      <td>$0/month</td>
+    </tr>
+    <tr>
+      <td><strong>Pro</strong></td>
+      <td>Unlimited runs · Debug & Convert · Priority support</td>
+      <td>$9.99/month</td>
+    </tr>
+  </table>
+  <br>
+  <a href="https://buy.stripe.com/test_eVqcN4gWp07icGl2cbds400" target="_blank" style="color:white; background-color:#0077cc; padding:10px 20px; text-decoration:none; border-radius:6px;">Upgrade to Pro 💳</a>
+</div>
+""", unsafe_allow_html=True)
 
 # ✅ Access tier logic
 plan = st.radio("Select your access tier", ["Free", "Pro"])
