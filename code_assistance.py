@@ -65,7 +65,7 @@ if tier == "Pro":
       <h4 style='margin-bottom:10px;'>💸 NM2TECH Pro Plan</h4>
       <p style='font-size:16px;'>Unlimited runs · Debug & Convert · Priority support</p>
       <p style='font-size:16px;'>Only <strong>$9.99/month</strong></p>
-      <a href="https://buy.stripe.com/test_eVqcN4gWp07icGl2cbds400" target="_blank"
+      <a href="https://buy.stripe.com/00w9AS21ney60zs1cvdZ603" target="_blank"
          style="color:white; background-color:#0077cc; padding:10px 20px; text-decoration:none; border-radius:6px; display:inline-block;">
          🔓 Upgrade to Pro
       </a>
@@ -95,11 +95,26 @@ elif tier == "Pro" and action != "Explain":
         st.stop()
 
 # ✅ Assistant logic
+# ✅ Assistant logic
 if st.button("Run Assistant"):
     with st.spinner("Analyzing with GPT-4..."):
-        prompt = f"You are a secure code assistant. {action} this code:\n{code_input}"
-        if action == "Convert":
-            prompt += f"\nConvert it into {language}."
+        # 🔧 Enhanced prompt template
+        prompt = f"""
+        You're a secure AI code assistant built for the NM2TECH platform.
+
+        Task: {action}
+        Language Preference: {language}
+
+        Instructions:
+        - If explaining, clearly describe the logic and purpose of the code.
+        - If debugging, identify and fix any issues while explaining your changes.
+        - If converting, rewrite the code accurately in {language} using best practices.
+
+        Code:
+        {code_input}
+
+        Return only your response or converted code as text.
+        """
 
         response = client.chat.completions.create(
             model="gpt-4",
@@ -119,12 +134,12 @@ if st.button("Run Assistant"):
             feedback=feedback
         )
 
-        # ✅ Local JSON logging
+        # ✅ Local logging
         with open("session_logs.json", "a") as f:
             json.dump({"code": code_input, "action": action, "output": output}, f)
             f.write("\n")
 
-        # 🎟️ Deduct Pro token if needed
+        # 🎟️ Token deduction
         if tier == "Pro" and action != "Explain":
             st.session_state["pro_uses_left"] -= 1
 
